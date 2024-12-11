@@ -124,13 +124,13 @@ def get_sudies_info(resp):
 
   return studies_info
 
-def save_to_csv(locations_info, file_name="locations.csv"):
-    if locations_info:
-        keys = locations_info[0].keys()  # Get headers from the first dictionary
+def save_to_csv(studies_info, file_name="studies_info.csv"):
+    if studies_info:
+        keys = studies_info[0].keys()  # Get headers from the first dictionary
         with open(file_name, "w", newline="", encoding="utf-8") as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=keys)
             writer.writeheader()
-            writer.writerows(locations_info)
+            writer.writerows(studies_info)
         print(f"Data saved to {file_name}")
     else:
         print("No data to save.")
@@ -139,4 +139,4 @@ if __name__ == "__main__":
   studies = get_response(full_url)
   studies_info = get_sudies_info(studies)
   print(len(studies_info))
-  save_to_csv(locations_info=studies_info)
+  save_to_csv(studies_info=studies_info)

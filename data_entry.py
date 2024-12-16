@@ -27,6 +27,8 @@ class Study:
   sex:str
   min_age:str
   max_age:str
+  mesh: str
+  term: str
 
 base_url = "https://clinicaltrials.gov/api/v2/studies"
 query_params = {
@@ -68,6 +70,7 @@ def get_sudies_info(resp):
         sex=study.get("protocolSection",{}).get("eligibilityModule",{}).get("sex")
         min_age=study.get("protocolSection",{}).get("eligibilityModule",{}).get("minimumAge")
         max_age=study.get("protocolSection",{}).get("eligibilityModule",{}).get("maximumAge")
+        meshes=study.get("derivedSection", {}).get("conditionBrowseModule", {}).get("meshes", [])
         
         for location in locations:
           city=location.get("city","")
@@ -76,31 +79,36 @@ def get_sudies_info(resp):
           lat=location.get("geoPoint",{}).get("lat")
           lon=location.get("geoPoint",{}).get("lon")
 
+          for i in meshes:
+             mesh=i.get("id", "")
+             term=i.get("term", "")
 
-          new_study = Study(
-            study_id=study_id,
-            city=city,
-            state=state,
-            country=country,
-            lat=lat,
-            lon=lon,
-            status=status,
-            start_date=start_date,
-            start_date_type=start_date_type,
-            completion_date=completion_date,
-            completion_date_type=completion_date_type,
-            study_type=study_type,
-            phases=phases,
-            allocation=allocation,
-            intervention_model=intervention_model,
-            primary_purpose=primary_purpose,
-            masking=masking,
-            healty_volunteers=healty_volunteers,
-            sex=sex,
-            min_age=min_age,
-            max_age=max_age
-          )
-          studies_info.append(asdict(new_study))
+             new_study = Study(
+                  study_id=study_id,
+                  city=city,
+                  state=state,
+                  country=country,
+                  lat=lat,
+                  lon=lon,
+                  status=status,
+                  start_date=start_date,
+                  start_date_type=start_date_type,
+                  completion_date=completion_date,
+                  completion_date_type=completion_date_type,
+                  study_type=study_type,
+                  phases=phases,
+                  allocation=allocation,
+                  intervention_model=intervention_model,
+                  primary_purpose=primary_purpose,
+                  masking=masking,
+                  healty_volunteers=healty_volunteers,
+                  sex=sex,
+                  min_age=min_age,
+                  max_age=max_age,
+                  mesh=mesh,
+                  term=term
+                )
+             studies_info.append(asdict(new_study))
       
      if not next_page_token:
         break
